@@ -7,4 +7,6 @@ with open('data.txt', 'r', encoding='utf-8') as f:
         if line:
             data.append(helper.parse_line_shlex(line))
 
-print(data)
+for i in data:
+    if i[2] > 100:
+        print(i)
