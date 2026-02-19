@@ -2,6 +2,11 @@ import shlex
 from datetime import datetime
 
 def parse_line_shlex(line: str):
+    """
+    Функция, которая разделяет строку по пробелам, игнорируя пробелы в подстроках
+    :param line: строка
+    :return: (тип ресурса (строка), дата, значение (дробное)) кортеж из 3
+    """
     parts = shlex.split(line)
     # ['Электро 123', '2024-11-20', '150.75']
     resource = parts[0]
@@ -13,12 +18,5 @@ def parse_line_shlex(line: str):
         value
     )
 
-def newqwe(mass):
-    c=0
-    for i in mass:
-        if i%2==0:
-            c+=1
-    return c
 
-print(newqwe([1, 2, 3, 4]))
 
