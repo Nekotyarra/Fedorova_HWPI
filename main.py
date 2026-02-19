@@ -9,5 +9,8 @@ with open('data.txt', 'r', encoding='utf-8') as f:
 
 print(data)
 for i in data:
-    if i[2] > 100:
-        print(i)
+    if i.value > 100:
+        print(i.resource, i.date, i.value)
+
+helper.delete_record(data, index=1)
+print(data)
