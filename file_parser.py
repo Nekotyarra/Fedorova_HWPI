@@ -1,10 +1,9 @@
 import shlex
 import datetime
-import classes
 from classes import MeterReading
 
 
-def parse_line_shlex(line: str) -> classes.MeterReading:
+def parse_line_shlex(line: str) -> MeterReading:
     """
     Функция, которая разделяет строку по пробелам, игнорируя пробелы в подстроках
     :param line: строка
@@ -17,13 +16,11 @@ def parse_line_shlex(line: str) -> classes.MeterReading:
     value = float(parts[2])
     return MeterReading(resource= resource, date=date, value=value)
 
-def add_record(data: list[MeterReading], resource: str, date: datetime.date, value: float) -> list[MeterReading]:
-    """Добавляет новую запись в список"""
-    data.append(MeterReading(resource, date, value))
-    return data
-
-def delete_record(data: list[MeterReading], index: int) -> list[MeterReading]:
-    """Удаляет запись по индексу"""
-    if 0 <= index < len(data):
-        data.pop(index)
+def file_open():
+    data = []
+    with open('data.txt', 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                data.append(parse_line_shlex(line))
     return data
