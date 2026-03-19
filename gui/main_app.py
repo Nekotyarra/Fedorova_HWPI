@@ -9,18 +9,34 @@ from data_manager import add_record, delete_record
 from gui.adddata_app import AddDialog
 
 
-class App(tk.Tk):
+class App(tk.Toplevel):
     """Главное окно приложения."""
 
-    def __init__(self, filename):
+    def __init__(self, filename, menu):
         super().__init__()
+        self.menu = menu
+
         self.title('Учёт показаний счётчиков')
         self.geometry('600x400')
         self.filename = filename
         self.data = file_open(filename)
 
+        self.center_window()
+
         self.create_widgets()
         self.refresh_table()
+
+        # При закрытии окна через крестик - возвращаемся в меню
+        self.protocol("WM_DELETE_WINDOW", self.go_back)
+
+    def center_window(self):
+        """Размещает окно по центру экрана."""
+        self.update_idletasks()
+        width = self.winfo_width()
+        height = self.winfo_height()
+        x = (self.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.winfo_screenheight() // 2) - (height // 2)
+        self.geometry(f'{width}x{height}+{x}+{y}')
 
     def _format_date(self, date: datetime.date) -> str:
         """Преобразует date в строку для отображения в таблице."""
@@ -58,6 +74,7 @@ class App(tk.Tk):
         ttk.Button(btn_frame, text='Добавить', command=self.add_record).pack(side='left', padx=5)
         ttk.Button(btn_frame, text='Удалить', command=self.delete_record).pack(side='left', padx=5)
         ttk.Button(btn_frame, text='Обновить из файла', command=self.reload_from_file).pack(side='left', padx=5)
+        ttk.Button(btn_frame, text='Назад', command=self.go_back).pack(side='left', padx=5)
 
         ttk.Label(btn_frame, text='Поиск:').pack(side='right', padx=5)
         self.search_var = tk.StringVar()
@@ -76,6 +93,13 @@ class App(tk.Tk):
 
         for reading in display_data:
             self.tree.insert('', 'end', values=(reading.resource, reading.date, reading.value))
+
+    def go_back(self):
+        """Возврат в главное меню."""
+        self.destroy()  # Закрываем рабочее окно
+        if self.menu:
+            self.menu.app = None
+            self.menu.deiconify()  # Показываем главное меню
 
     def add_record(self):
         """Открывает диалог добавления и обновляет данные."""
