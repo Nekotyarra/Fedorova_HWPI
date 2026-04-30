@@ -4,23 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a85387aa-30a4-4053-8f7b-9a2addbcb3e5" name="Changes" comment="Рабочая версия lab2 с костылем через None">
-      <change afterPath="$PROJECT_DIR$/input_file" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_data_meneger.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_date.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_file_parser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_protection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/file_parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/adddata_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/adddata_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/main_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/protection.py" beforeDir="false" afterPath="$PROJECT_DIR$/protection.py" afterDir="false" />
-    </list>
+    <list default="true" id="a85387aa-30a4-4053-8f7b-9a2addbcb3e5" name="Changes" comment="Рабочая версия lab2 с костылем через None" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
