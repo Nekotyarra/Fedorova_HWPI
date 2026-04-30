@@ -4,13 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a85387aa-30a4-4053-8f7b-9a2addbcb3e5" name="Changes" comment="Add parse_function">
-      <change afterPath="$PROJECT_DIR$/gui/help_app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gui/menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/PI_Homework.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PI_Homework.iml" afterDir="false" />
+    <list default="true" id="a85387aa-30a4-4053-8f7b-9a2addbcb3e5" name="Changes" comment="Рабочая версия lab2 с костылем через None">
+      <change afterPath="$PROJECT_DIR$/input_file" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_data_meneger.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_date.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_file_parser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_protection.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/file_parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/adddata_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/adddata_app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/main_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/protection.py" beforeDir="false" afterPath="$PROJECT_DIR$/protection.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,12 +47,12 @@
     &quot;assignee&quot;: &quot;Nekotyarra&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Nekotyarra/-_-&quot;,
-    &quot;accountId&quot;: &quot;d35170d6-fe22-465f-b307-c0c89ac7a482&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Nekotyarra/Fedorova_HWPI.git",
+    "accountId": "8d279474-4dda-4b18-9b94-3b92f827b376"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -66,13 +75,20 @@
     "Python.main_app.executor": "Run",
     "Python.menu.executor": "Run",
     "Python.protection.executor": "Run",
+    "Python.test_protection.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\kapaf\PycharmProjects\Fedorova_HWPI" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="PI_Homework" />
@@ -128,7 +144,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-d9fa9deec7cb-d902c0275401-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-252.23892.515" />
+        <option value="bundled-python-sdk-79ce2b023f03-d902c0275401-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-252.25557.130" />
       </set>
     </attachedChunks>
   </component>
@@ -156,7 +172,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771468352387</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Рабочая версия lab2 с костылем через None">
+      <option name="closed" value="true" />
+      <created>1773888839161</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1773888839161</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -172,6 +196,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Laba1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Laba1" />
+    <MESSAGE value="Рабочая версия lab2 с костылем через None" />
+    <option name="LAST_COMMIT_MESSAGE" value="Рабочая версия lab2 с костылем через None" />
   </component>
 </project>

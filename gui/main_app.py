@@ -48,7 +48,7 @@ class App(tk.Toplevel):
         table_frame = ttk.Frame(self)
         table_frame.pack(side='top', fill='both', expand=True, padx=5, pady=5)
 
-        columns = ('resource', 'date', 'value')
+        columns = ('resource', 'date', 'value', 'quality')
 
         # Таблица занимает левую часть и расширяется
         self.tree = ttk.Treeview(table_frame, columns=columns, show='headings')
@@ -57,9 +57,11 @@ class App(tk.Toplevel):
         self.tree.heading('resource', text='Ресурс')
         self.tree.heading('date', text='Дата')
         self.tree.heading('value', text='Значение')
+        self.tree.heading('quality', text='Качество')
         self.tree.column('resource', width=200)
         self.tree.column('date', width=100)
         self.tree.column('value', width=100)
+        self.tree.column('quality', width=100)
 
         # Скроллбар справа, заполняет по вертикали
         scrollbar = ttk.Scrollbar(table_frame, orient='vertical', command=self.tree.yview)
@@ -92,7 +94,7 @@ class App(tk.Toplevel):
         display_data = data_to_show if data_to_show is not None else self.data
 
         for reading in display_data:
-            self.tree.insert('', 'end', values=(reading.resource, reading.date, reading.value))
+            self.tree.insert('', 'end', values=(reading.resource, reading.date, reading.value, reading.quality))
 
     def go_back(self):
         """Возврат в главное меню."""
@@ -105,8 +107,8 @@ class App(tk.Toplevel):
         """Открывает диалог добавления и обновляет данные."""
         dlg = AddDialog(self)
         if dlg.result:
-            resource, date, value = dlg.result
-            self.data = add_record(self.data, resource, date, value)
+            resource, date, value, quality = dlg.result
+            self.data = add_record(self.data, resource, date, value, quality)
             self.refresh_table()
 
     def delete_record(self):
@@ -154,6 +156,10 @@ class App(tk.Toplevel):
 
             date_iso2 = reading.date.strftime('%Y.%m.%d')
             if search_text in date_iso2:
+                filtered.append(reading)
+                continue
+
+            if search_text in reading.quality.lower():
                 filtered.append(reading)
                 continue
 

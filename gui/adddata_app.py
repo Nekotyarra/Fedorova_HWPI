@@ -28,9 +28,13 @@ class AddDialog(tk.Toplevel):
         self.value_var = tk.StringVar()
         ttk.Entry(self, textvariable=self.value_var, width=30).grid(row=2, column=1, padx=5, pady=5)
 
+        ttk.Label(self, text='Качество:').grid(row=3, column=0, padx=5, pady=5, sticky='e')
+        self.quality_var = tk.StringVar()
+        ttk.Entry(self, textvariable=self.quality_var, width=30).grid(row=3, column=1, padx=5, pady=5)
+
         # Кнопки
         btn_frame = ttk.Frame(self)
-        btn_frame.grid(row=3, column=0, columnspan=2, pady=10)
+        btn_frame.grid(row=4, column=0, columnspan=2, pady=10)
         ttk.Button(btn_frame, text='OK', command=self.ok_click).pack(side='left', padx=5)
         ttk.Button(btn_frame, text='Отмена', command=self.cancel_click).pack(side='left')
 
@@ -44,6 +48,7 @@ class AddDialog(tk.Toplevel):
         resource = self.resource_var.get().strip()
         date_str = self.date_var.get().strip()
         value_str = self.value_var.get().strip()
+        quality = self.quality_var.get().strip()
 
         if not resource or not date_str or not value_str:
             messagebox.showerror('Ошибка', 'Все поля должны быть заполнены')
@@ -60,7 +65,7 @@ class AddDialog(tk.Toplevel):
             messagebox.showerror('Ошибка', 'Значение должно быть числом')
             return
 
-        self.result = (resource, date, value)
+        self.result = (resource, date, value, quality)
         self.destroy()
 
     def cancel_click(self):

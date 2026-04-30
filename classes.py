@@ -6,4 +6,4 @@ class MeterReading:
     resource: str
     date: datetime.date
     value: float
-
+    quality : str
