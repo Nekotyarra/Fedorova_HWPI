@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a85387aa-30a4-4053-8f7b-9a2addbcb3e5" name="Changes" comment="Рабочая версия lab2 с костылем через None" />
+    <list default="true" id="a85387aa-30a4-4053-8f7b-9a2addbcb3e5" name="Changes" comment="Рабочая версия lab2 с костылем через None">
+      <change beforePath="$PROJECT_DIR$/tests/test_protection.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_protection.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
