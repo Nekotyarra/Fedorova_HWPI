@@ -2,86 +2,121 @@
 
 import tkinter as tk
 import datetime
-from tkinter import ttk, messagebox
-from classes import MeterReading
+from tkinter import ttk, messagebox, filedialog
+from classes import MeterReading, MeterModel, MeterValidationError
 from file_parser import file_open
 from data_manager import add_record, delete_record
 from gui.adddata_app import AddDialog
 
+import logging
+from command_processor import CommandProcessor
 
-class App(tk.Toplevel):
-    """Главное окно приложения."""
+logger = logging.getLogger(__name__)
 
-    def __init__(self, filename, menu):
-        super().__init__()
-        self.menu = menu
 
-        self.title('Учёт показаний счётчиков')
-        self.geometry('600x400')
-        self.filename = filename
-        self.data = file_open(filename)
+class ErrorLogger:
+    """Виджет для отображения лога ошибок."""
 
-        self.center_window()
+    def __init__(self):
+        self.text_widget = None
 
-        self.create_widgets()
-        self.refresh_table()
+    def initialize(self, parent: tk.Frame) -> None:
+        """Создаёт виджет лога."""
+        frame = tk.LabelFrame(parent, text="Лог ошибок")
+        frame.pack(fill=tk.BOTH, expand=True, padx=15, pady=5)
 
-        # При закрытии окна через крестик - возвращаемся в меню
-        self.protocol("WM_DELETE_WINDOW", self.go_back)
+        self.text_widget = tk.Text(frame, height=6, wrap=tk.WORD)
+        self.text_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-    def center_window(self):
-        """Размещает окно по центру экрана."""
-        self.update_idletasks()
-        width = self.winfo_width()
-        height = self.winfo_height()
-        x = (self.winfo_screenwidth() // 2) - (width // 2)
-        y = (self.winfo_screenheight() // 2) - (height // 2)
-        self.geometry(f'{width}x{height}+{x}+{y}')
+        scrollbar = tk.Scrollbar(frame, command=self.text_widget.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.text_widget.config(yscrollcommand=scrollbar.set)
 
-    def _format_date(self, date: datetime.date) -> str:
-        """Преобразует date в строку для отображения в таблице."""
-        return date.strftime('%d-%m-%Y')
+    def log_error(self, error_msg: str, context: dict = None) -> None:
+        """Добавляет сообщение об ошибке в лог."""
+        import datetime
+        timestamp = datetime.datetime.now().strftime('%H:%M:%S')
+        msg = f'[{timestamp}] {error_msg}'
+        if context:
+            msg += f' | Данные: {context}'
+        self.text_widget.insert(tk.END, msg + '\n')
+        self.text_widget.see(tk.END)
 
-    def create_widgets(self):
-        """Создаёт элементы интерфейса."""
-        # Создаём фрейм-контейнер для таблицы и скроллбара
-        table_frame = ttk.Frame(self)
-        table_frame.pack(side='top', fill='both', expand=True, padx=5, pady=5)
+
+class MeterApp:
+    def __init__(self, filename: str, parent=None):
+        """
+        Args:
+            filename: путь к файлу с данными
+            parent: родительское окно (MenuApp)
+        """
+        self.parent = parent
+
+        # Скрываем родительское окно (меню)
+        if parent:
+            parent.withdraw()
+
+        # Создаём новое окно
+        self.root = tk.Toplevel(parent) if parent else tk.Tk()
+        self.root.title("Учёт показаний счётчиков")
+        self.root.geometry("800x600")
+
+        # При закрытии окна возвращаемся в меню
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+        self.model = MeterModel(filename)
+        self.processor = CommandProcessor(self.model)
+
+        self.error_logger = ErrorLogger()
+        self._create_table()
+        self._create_buttons()
+
+        bottom_frame = tk.Frame(self.root)
+        bottom_frame.pack(fill=tk.BOTH, expand=True, pady=(10, 0))
+        self.error_logger.initialize(bottom_frame)
+
+        self._refresh_table()
+
+    def on_closing(self):
+        """Обработка закрытия окна - возврат в меню."""
+        if self.parent:
+            self.parent.deiconify()  # Показываем меню
+        self.root.destroy()
+
+    def _create_table(self) -> None:
+        frame = tk.Frame(self.root)
+        frame.pack(pady=8, padx=15, fill=tk.BOTH, expand=True)
 
         columns = ('resource', 'date', 'value', 'quality')
+        self.table = ttk.Treeview(frame, columns=columns, show='headings')
 
-        # Таблица занимает левую часть и расширяется
-        self.tree = ttk.Treeview(table_frame, columns=columns, show='headings')
-        self.tree.pack(side='left', fill='both', expand=True)
+        self.table.heading('resource', text='Ресурс')
+        self.table.heading('date', text='Дата')
+        self.table.heading('value', text='Значение')
+        self.table.heading('quality', text='Качество')
 
-        self.tree.heading('resource', text='Ресурс')
-        self.tree.heading('date', text='Дата')
-        self.tree.heading('value', text='Значение')
-        self.tree.heading('quality', text='Качество')
-        self.tree.column('resource', width=200)
-        self.tree.column('date', width=100)
-        self.tree.column('value', width=100)
-        self.tree.column('quality', width=100)
+        self.table.column('resource', width=200, anchor='center')
+        self.table.column('date', width=120, anchor='center')
+        self.table.column('value', width=100, anchor='center')
+        self.table.column('quality', width=100, anchor='center')
 
-        # Скроллбар справа, заполняет по вертикали
-        scrollbar = ttk.Scrollbar(table_frame, orient='vertical', command=self.tree.yview)
-        scrollbar.pack(side='right', fill='y')
+        scrollbar = ttk.Scrollbar(frame, orient='vertical', command=self.table.yview)
+        self.table.configure(yscrollcommand=scrollbar.set)
+        self.table.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        self.tree.configure(yscrollcommand=scrollbar.set)
+    def _create_buttons(self) -> None:
+        frame = tk.Frame(self.root)
+        frame.pack(pady=10)
 
-        # Далее идёт код для панели кнопок и поиска
-        btn_frame = ttk.Frame(self)
-        btn_frame.pack(side='bottom', fill='x', padx=5, pady=5)
+        tk.Button(frame, text="[ Добавить показание ]",
+                  command=self.add_record).pack(side=tk.LEFT, padx=5)  # убрали скобки
 
-        ttk.Button(btn_frame, text='Добавить', command=self.add_record).pack(side='left', padx=5)
-        ttk.Button(btn_frame, text='Удалить', command=self.delete_record).pack(side='left', padx=5)
-        ttk.Button(btn_frame, text='Обновить из файла', command=self.reload_from_file).pack(side='left', padx=5)
-        ttk.Button(btn_frame, text='Назад', command=self.go_back).pack(side='left', padx=5)
+        tk.Button(frame, text="[ Удалить выбранное ]",
+                  command=self._on_delete).pack(side=tk.LEFT, padx=5)
 
-        ttk.Label(btn_frame, text='Поиск:').pack(side='right', padx=5)
-        self.search_var = tk.StringVar()
-        self.search_var.trace('w', self.on_search)
-        ttk.Entry(btn_frame, textvariable=self.search_var, width=15).pack(side='right', padx=5)
+        tk.Button(frame, text="[ Выполнить команды ]",
+                  command=self._on_run_commands).pack(side=tk.LEFT, padx=5)
 
     def refresh_table(self, data_to_show=None):
         """Обновляет отображение таблицы в соответствии с текущими данными.
@@ -96,71 +131,58 @@ class App(tk.Toplevel):
         for reading in display_data:
             self.tree.insert('', 'end', values=(reading.resource, reading.date, reading.value, reading.quality))
 
-    def go_back(self):
-        """Возврат в главное меню."""
-        self.destroy()  # Закрываем рабочее окно
-        if self.menu:
-            self.menu.app = None
-            self.menu.deiconify()  # Показываем главное меню
+    def _refresh_table(self) -> None:
+        for row in self.table.get_children():
+            self.table.delete(row)
+
+        for reading in self.model.get_all():
+            self.table.insert('', tk.END, values=(
+                reading.resource,
+                reading.date,
+                reading.value,
+                reading.quality
+            ))
 
     def add_record(self):
-        """Открывает диалог добавления и обновляет данные."""
-        dlg = AddDialog(self)
+        """Открывает диалог добавления записи."""
+        from gui.adddata_app import AddDialog
+        dlg = AddDialog(self.root)
         if dlg.result:
-            resource, date, value, quality = dlg.result
-            self.data = add_record(self.data, resource, date, value, quality)
-            self.refresh_table()
+            resource, date_obj, value, quality = dlg.result  # date_obj - это datetime.date
+            try:
+                # Преобразуем datetime.date в строку
+                date_str = date_obj.strftime('%Y.%m.%d')
+                self.model.add_reading(resource, date_str, value, quality)
+                self._refresh_table()
+            except MeterValidationError as e:
+                messagebox.showerror("Ошибка валидации", str(e))
 
-    def delete_record(self):
-        """Удаляет выделенную в таблице запись."""
-        selected = self.tree.selection()
+    def _on_delete(self) -> None:
+        selected = self.table.selection()
         if not selected:
-            messagebox.showwarning('Предупреждение', 'Выберите запись для удаления')
+            messagebox.showwarning("", "Выберите запись!")
             return
 
-        # Подтверждение удаления
-        if not messagebox.askyesno('Подтверждение', 'Удалить выбранную запись?'):
+        index = self.table.index(selected[0])
+        try:
+            self.model.delete_reading(index)
+            self._refresh_table()
+        except IndexError as e:
+            messagebox.showerror("Ошибка", str(e))
+
+    def _on_run_commands(self) -> None:
+        filename = filedialog.askopenfilename(
+            title="Выберите файл команд",
+            filetypes=[("Текстовые файлы", "*.txt"), ("Все файлы", "*.*")]
+        )
+        if not filename:
             return
 
-        # Получаем индекс выбранной строки
-        item = selected[0]
-        index = self.tree.index(item)
-        self.data = delete_record(self.data, index)
-        self.refresh_table()
+        self.processor.run_file(filename)
+        self._refresh_table()
+        messagebox.showinfo(
+            "Готово",
+            f"Команды выполнены.\nСм. лог для деталей."
+        )
 
-    def reload_from_file(self):
-        """Перезагружает данные из исходного файла."""
-        if messagebox.askyesno('Подтверждение',
-                               'Перезагрузить данные из файла? Несохранённые изменения будут потеряны.'):
-            self.data = file_open(self.filename)
-            self.refresh_table()
 
-    def on_search(self, *args):
-        search_text = self.search_var.get().strip().lower()
-        if not search_text:
-            self.refresh_table(self.data)
-            return
-
-        filtered = []
-        for reading in self.data:
-            # Поиск по ресурсу (без изменений)
-            if search_text in reading.resource.lower():
-                filtered.append(reading)
-                continue
-
-            # Поиск по дате в формате ГГГГ-ММ-ДД
-            date_iso = reading.date.strftime('%Y-%m-%d')
-            if search_text in date_iso:
-                filtered.append(reading)
-                continue
-
-            date_iso2 = reading.date.strftime('%Y.%m.%d')
-            if search_text in date_iso2:
-                filtered.append(reading)
-                continue
-
-            if search_text in reading.quality.lower():
-                filtered.append(reading)
-                continue
-
-        self.refresh_table(filtered)
