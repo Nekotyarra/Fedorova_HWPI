@@ -1,0 +1,89 @@
+# Python
+
+__pycache__/
+*.py[cod]
+*.so
+.Python
+*.egg-info/
+*.egg
+dist/
+build/
+*.pyc
+*.pyo
+*.pyd
+
+
+# Виртуальное окружение
+
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+
+# IDE и редакторы
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-*
+
+# Spyder
+.spyproject/
+
+
+# Тесты и покрытие
+
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+*.cover
+coverage.xml
+*.log
+
+
+# Временные файлы
+
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+
+# Данные
+
+*.txt
+!requirements.txt
+*.log
+*.db
+*.sqlite
+
+
+# Результаты работы программы
+result.txt
+filtered_data.txt
+safe_result.txt
+output.txt
+backup/
+
+
+# Отчёты и документация (если генерируются)
+
+*.pdf
+*.docx
+*.html
