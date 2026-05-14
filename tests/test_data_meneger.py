@@ -17,15 +17,15 @@ class TestDataManager:
     def setup_method(self):
         """Подготовка данных перед каждым тестом."""
         self.data = [
-            MeterReading("Электроэнергия", datetime.date(2024, 11, 20), 150.75),
-            MeterReading("Водоснабжение", datetime.date(2024, 12, 1), 95.0),
-            MeterReading("Газ", datetime.date(2025, 1, 15), 1234.56),
+            MeterReading("Электроэнергия", datetime.date(2024, 11, 20), 150.75, "good"),
+            MeterReading("Водоснабжение", datetime.date(2024, 12, 1), 95.0, "normal"),
+            MeterReading("Газ", datetime.date(2025, 1, 15), 1234.56, "excellent"),
         ]
 
     def test_add_record(self):
         """Тест добавления записи."""
-        new_record = MeterReading("Отопление", datetime.date(2024, 10, 1), 0.0)
-        result = add_record(self.data, "Отопление", datetime.date(2024, 10, 1), 0.0)
+        new_record = MeterReading("Отопление", datetime.date(2024, 10, 1), 0.0, "bad")
+        result = add_record(self.data, "Отопление", datetime.date(2024, 10, 1), 0.0, "bad")
 
         assert len(result) == 4
         assert result[-1] == new_record
@@ -41,7 +41,6 @@ class TestDataManager:
         """Тест удаления по неверному индексу."""
         result = delete_record(self.data, 10)
 
-        # Данные не должны измениться
         assert len(result) == 3
 
     def test_find_records_by_resource(self):
